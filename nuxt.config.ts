@@ -9,7 +9,8 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/icon',
     '@nuxt/scripts',
-    '@nuxt/image'
+    '@nuxt/image',
+    '@pinia/nuxt'
   ],
   plugins: ['~/plugins/element-plus.js']
 

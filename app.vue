@@ -20,6 +20,7 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   -webkit-font-smoothing: antialiased;
+  background-attachment: fixed;
   font-family: "Gill Sans", sans-serif;
 }
 

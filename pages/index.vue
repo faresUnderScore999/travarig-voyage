@@ -6,68 +6,81 @@
     <div class="search_tab">
       <div
         :class="['item', page === 'HOTELS' ? 'selectedItem' : '']"
-        @click="page = 'HOTELS'"
+        @click="changePage('HOTELS')"
       >
         <HotelIcon />HOTELS
       </div>
       <div
         :class="['item', page === 'FLIGHTS' ? 'selectedItem' : '']"
-        @click="page = 'FLIGHTS'"
+        @click="changePage('FLIGHTS')"
       >
         <PlaneIcon />FLIGHTS
       </div>
       <div
         :class="['item', page === 'TRIPS' ? 'selectedItem' : '']"
-        @click="page = 'TRIPS'"
+        @click="changePage('TRIPS')"
       >
         <TripIcon />Vacation Packages
       </div>
       <div
         :class="['item', page === 'ACTIVITIES' ? 'selectedItem' : '']"
-        @click="page = 'ACTIVITIES'"
+        @click="changePage('ACTIVITIES')"
       >
         <ActivitiesIcon />ACTIVITIES
       </div>
     </div>
   
   </div>
-  <div v-show="page === 'FLIGHTS'"><FlightSearch/></div>
-<div v-show="page === 'HOTELS'" class="search"><HotelSearch/></div>
+
+  
+ <div v-if="page == 'FLIGHTS'"><FlightSearch/></div>
+    <div v-show="page === 'HOTELS'" class="search"><HotelSearch/></div> 
 
   
   <div class="offersSection">
     <h1>OUR BEST OFFERS</h1>
     <div class="offers">
-      <OfferCard v-for="i in 3" :key="i" />
+      <OfferCard v-for="i in 5" :key="i" />
     </div>
   </div>
   
 </div>
+
 </template>
 
 <script setup>
 import { ref, watch  } from "vue"; // Import ref for reactive state
 import PlaneIcon from "~/components/icons/plane.vue";
 import OfferCard from "~/components/cards/offer.vue";
-import HotelSearch from "~/components/search/hotel.vue";
+ import HotelSearch from "~/components/search/hotel.vue";
 import FlightSearch from "~/components/search/flight.vue";
 import TripIcon from "~/components/icons/trip.vue";
 import ActivitiesIcon from "~/components/icons/activities.vue";
 import HotelIcon from "~/components/icons/hotel.vue";
 
 // Declare the 'page' variable using ref() for reactivity
-const page = ref("FLIGHTS");
+
+const page = ref("HOTELS");
+
 watch(page, (newPage, oldPage) => {
   console.log('Page changed from', oldPage, 'to', newPage);
 });
+const changePage = (Npage) => {
+  page.value = Npage;
+}
+
+
 </script>
 
 <style scoped>
 .offers{
-  display: flex;
+  display: grid;
   width: 100%;
-  justify-content: space-around;
   margin-bottom: 50px;
+
+  grid-template-columns: repeat(auto-fit, minmax(300px, 6fr)); 
+  justify-items: center;
+  grid-gap: 10px;
 }
 .offersSection{
   height: fit-content;

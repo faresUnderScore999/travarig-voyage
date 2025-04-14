@@ -17,7 +17,7 @@
               />
             </svg>
           </div>
-          <div style="display: flex; align-items: center; color: white">
+          <div style="margin-left: 10px; display: flex; align-items: center; color: white">
             +216 51000000
           </div>
         </div>
@@ -63,44 +63,87 @@
           </svg>
         </div>
       </div>
-      <div class="box log">
-        <el-button  class="white-link-button" type="primary" link @click="dialogFormVisible = true" 
+      <div v-show="!loged.logedin" class="box log">
+        <el-button  class="white-link-button" type="primary" link @click="loginSearchdepart = true" 
           >LOGIN</el-button
         >
       </div>
-      <div class="box log">
-        <el-button :key="'plain'" type="" link>REGISTER</el-button>
+      <div v-show="!loged.logedin" class="box log">
+        <el-button :key="'plain'" type="" link @click="registerSearchdepart = true" >REGISTER</el-button>
+      </div>
+      <div v-show="loged.logedin" class="box loged">
+        <el-button :key="'plain'" type="" link  >  <el-icon size="30"><Avatar /></el-icon></el-button>
+      
       </div>
     </div>
 
-    <el-dialog v-model="dialogFormVisible" title="Login Form" width="500">
+    <el-dialog :id="dialogId" v-model="loginSearchdepart" title="Login Form" width="500">
     <el-form :model="form">
       <el-form-item label="Email" :label-width="formLabelWidth">
-        <el-input placeholder="enter your email here" v-model="form.mail" autocomplete="off" />
+        <el-input v-model="loginForm.mail" placeholder="enter your email here" autocomplete="off" />
       </el-form-item>
       <el-form-item label="Password" :label-width="formLabelWidth">
-        <el-input placeholder="enter your password here" v-model="form.mdp" autocomplete="off" />
+        <el-input v-model="loginForm.pwd" placeholder="enter your password here" autocomplete="off" />
       </el-form-item>
     </el-form>
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">
+        <el-button @click="loginSearchdepart = false">Cancel</el-button>
+        <el-button type="primary" @click="loginSubmit">
           Confirm
         </el-button>
       </div>
     </template>
   </el-dialog>
-
-  
+  <el-dialog :id="dialogId" v-model="registerSearchdepart" title="Register Form" width="900">
+    <el-form :model="form">
+      <el-form-item label="Full Name" :label-width="formLabelWidth">
+        <el-input v-model="form.mail" placeholder="enter your Full Name here" autocomplete="on" />
+      </el-form-item>
+      <el-form-item label="Password" :label-width="formLabelWidth">
+        <el-input v-model="form.mail" placeholder="enter your password here" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="Password" :label-width="formLabelWidth">
+        <el-input v-model="form.mail" placeholder="confirm your password here" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="Email" :label-width="formLabelWidth">
+        <el-input v-model="form.mail" placeholder="enter your email here" autocomplete="on" />
+      </el-form-item>
+      <el-form-item label="capchat" :label-width="formLabelWidth">
+        <el-input v-model="form.mdp" placeholder="" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="registerSearchdepart = false">Cancel</el-button>
+        <el-button type="primary" @click="registerSearchdepart = false">
+          Confirm
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+const { generateId } = useNuxtApp().$idProvider;
+const dialogId = generateId()
 
 // Reactive state
-const dialogFormVisible = ref(false);
+const loginSearchdepart = ref(false);
+const registerSearchdepart = ref(false);
+const loginForm=ref({
+  mail:"",
+  pwd:""
+})
+const loged = useLoginStore()
+const loginSubmit = () => {
+
+  loged.login(loginForm.value)
+  loginSearchdepart.value = false
+  console.log(loged.logedin)
+}
 
 // Form model
 const form = ref({
@@ -137,6 +180,10 @@ router-link {
   position: relative;
   left: calc(100% - 400px);
   color: white;
+}
+.loged{
+  position: absolute;
+  right: 2%;
 }
 .box {
   border: 0px #000000 solid;

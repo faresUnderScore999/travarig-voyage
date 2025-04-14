@@ -3,14 +3,14 @@
     <DefaultHeader />
 
     <header class="sticky-header">
-      <img src="~/assets/logo.png" alt="Discover Nuxt" />
+    
       <nav>
         <menuNavigation />
       </nav>
     </header>
     <main>
       <!-- Slot for the page content -->
-      <slot></slot>
+      <slot/>
     </main>
     <!-- <footer>
         <p>&copy; 2025 My Website</p>
@@ -53,6 +53,7 @@ router-link {
   text-decoration: none; /* Remove underline */
   color: inherit; /* Keep the color of the parent element */
 }
+
 img {
   max-width: 100px; /* Optional: limit the image size */
   height: auto;
