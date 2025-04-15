@@ -2,32 +2,15 @@
   <div class="menu">
     <img src="~/assets/logo.png" alt="travigir" >
     <div
-      :class="['item', navigation.page === 'Home' ? 'selected' : '']"
-      @click="changePage('Home')"
-    >
-      Home
-    </div>
-    <div
-      :class="['item', navigation.page === 'Assistance' ? 'selected' : '']"
-      @click="changePage('Assistance')"
-    > Visa & Travel Documents Assistance
-    
-    </div>
- 
-    <div
-      :class="['item', navigation.page === 'Offers' ? 'selected' : '']"
-      @click="changePage('Offers')"
-    >
-      Offers
-    </div>
-  
-    <div
-      :class="['item', navigation.page === 'Contact' ? 'selected' : '']"
-      @click="changePage('Contact')"
-    >
-      Contact
-    </div>
+        v-for="item in navItems"
+        :key="item.route"
+        :class="['item', navigation.page === item.page ? 'selected' : '']"
+        @click="changePage(item.page)"
+      >
+        {{ item.label }}
+      </div>
   </div>
+
 </template>
 
 <script setup>
@@ -35,20 +18,29 @@
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const navigation = navigationStore()
+const isMenuOpen = ref(false)
+const navItems = [
+  { page: 'Home', label: 'Home', route: '/' },
+  { page: 'Offers', label: 'Offers', route: '/vol' },
+  { page: 'Assistance', label: 'Visa & Travel Documents Assistance', route: '/assistance' },
+  { page: 'Contact', label: 'Contact', route: '/Contact' }
+]
 
-const changePage = (Npage) => {
-  try{
-  navigation.changePageTo(Npage)
-  console.log('pushing to ' + Npage)
-  
-  if (Npage === 'Home') {
-    router.push('/')
-  } else if (Npage === 'Assistance') {
-    router.push('/assistance')
-  } else if (Npage === 'vol') {
-    router.push('/vol/index')
-  }}
-  catch(err){
+const changePage = (page) => {
+  try {
+    navigation.changePageTo(page)
+    console.log('pushing to ' + page)
+    
+    const route = navItems.find(item => item.page === page)?.route
+    if (route) {
+      router.push(route)
+    }
+    
+    // Close menu on mobile
+    if (window.innerWidth < 768) {
+      isMenuOpen.value = false
+    }
+  } catch (err) {
     console.log("problem routing")
     console.log(err)
   }

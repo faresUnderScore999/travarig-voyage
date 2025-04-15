@@ -7,7 +7,17 @@
     <div class="box">children</div>
     <div></div>
     <div class="box">
-      <el-input style="width: 90%" placeholder="Please input" />
+    
+      <el-input 
+          
+          placeholder="Where are you going?" 
+          clearable
+          style="width: 90%"
+        >
+          <template #prefix>
+            <el-icon><Location /></el-icon>
+          </template>
+        </el-input>
     </div>
     <div class="box">
       <el-date-picker type="date" placeholder="Pick a date" style="width: 90%" />
@@ -21,16 +31,33 @@
     <div class="box">
       <el-input-number v-model="num" :min="1" :max="10"/>
     </div>
-    <div class="box"> <el-button  type="warning" round>SEARCH</el-button></div>
+    <div class="box">
+       <!-- <el-button  type="warning" round @click="shearchHotel">SEARCH</el-button> -->
+       <el-button 
+          type="warning" 
+          round 
+          @click="searchHotel"
+          :loading="loading"
+        >
+          <template #icon>
+            <el-icon><Search /></el-icon>
+          </template>
+          SEARCH HOTELS
+        </el-button>
+    </div>
    
   </div>
 </template>
 <script setup>
 import { ref } from "vue"; // Import ref for reactive state
-
-
+import { useRouter } from 'vue-router'
+const router =useRouter()
 // Declare the 'page' variable using ref() for reactivity
 const num = ref("HOTELS");
+
+const shearchHotel =()=>{
+  router.push('/hotel')
+}
 </script>
 <style scoped>
 .box{

@@ -7,6 +7,7 @@
     <div class="box">passagens</div>
     <div class="box">action</div>
     <div style="margin-left: 10px" class="box">
+      <client-only>
       <el-autocomplete
         v-model="formFlight.depart.displayname"
         :fetch-suggestions="querySearch"
@@ -28,9 +29,10 @@
             </div>
           </div>
         </template>
-      </el-autocomplete>
+      </el-autocomplete></client-only>
     </div>
     <div style="margin-left: 10px" class="box">
+      <client-only>
       <el-autocomplete
         v-model="formFlight.destination.displayname"
         :fetch-suggestions="querySearch"
@@ -53,22 +55,27 @@
           </div>
         </template>
       </el-autocomplete>
+    </client-only>
     </div>
     <div class="box">
+      <client-only>
+        
       <el-date-picker
-        v-model="formFlight.dateDepart"
+        v-model="formFlight.dateIn"
         type="date"
         placeholder="Pick a date"
-        style="width: 90%"
-      />
+        style="width: 90%;"
+      /></client-only>
     </div>
     <div class="box">
+      <client-only>
       <el-date-picker
         v-model="formFlight.dateOut"
         type="date"
         placeholder="Pick a date"
         style="width: 90%"
-      />
+        :disabled-date="disableBeforeCheckIn"
+      /></client-only>
     </div>
     <div class="box NBpassenger">
       <el-dropdown trigger="click" :hide-on-click="false">
@@ -165,7 +172,9 @@ const submitSearch = () => {
 
   router.push("/vol");}
 };
-
+const disableBeforeCheckIn = (date) => {
+  return formFlight.dateIn ? date < new Date(formFlight.dateIn) : false
+}
 const handleSelectdepart = (item) => {
   console.log("Selected item:", item);
   Object.assign(formFlight.depart, item);

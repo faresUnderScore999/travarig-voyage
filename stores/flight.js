@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 
 export const flightStore = defineStore('flight', {
     state: () => ({
-        dateDepart: null,
-        dateOut: null,
+        dateIn: '',
+        dateOut: '',
         NBadult: 1,
         NBenfant: 0,
         NBbbAsise: 0,
@@ -18,6 +18,23 @@ export const flightStore = defineStore('flight', {
     actions: {
     
    
+    },
+  })
+  export const flightFilterStore = defineStore('flightFilter', {
+    state: () => ({
+      maxPrice: undefined,
+      minPrice: undefined,
+      compagnie: undefined,
+    }),
+    actions: {
+      setMaxPrice(val) {
+        this.maxPrice = val
+        console.log('price set to ' + val)
+      },
+      setMinPrice(val) {
+        this.minPrice = val
+        console.log('price set to ' + val)
+      },
     },
   })
   
