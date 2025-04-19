@@ -5,9 +5,29 @@
         v-for="item in navItems"
         :key="item.route"
         :class="['item', navigation.page === item.page ? 'selected' : '']"
-        @click="changePage(item.page)"
+       
       >
-        {{ item.label }}
+      <div v-if="item.page=='Offers'">
+        <ClientOnly>
+        <el-dropdown class="itemLabl">
+        <span >
+          {{ item.label }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
+        </span>
+       
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item  @click="changePage('Flight')"><el-icon><SuitcaseLine /></el-icon>Flights</el-dropdown-item>
+            <el-dropdown-item  @click="changePage('Hotel')"><el-icon><OfficeBuilding /></el-icon> Hotel </el-dropdown-item>
+            <el-dropdown-item  ><el-icon><DishDot /></el-icon> Hajj & Omra </el-dropdown-item>
+          </el-dropdown-menu>
+          
+        </template>
+     
+      </el-dropdown>
+    </ClientOnly>
+        </div>
+      <div v-else  @click="changePage(item.page)"> {{ item.label }}</div>
+       
       </div>
   </div>
 
@@ -28,12 +48,15 @@ const navItems = [
 
 const changePage = (page) => {
   try {
-    navigation.changePageTo(page)
-    console.log('pushing to ' + page)
-    
-    const route = navItems.find(item => item.page === page)?.route
-    if (route) {
-      router.push(route)
+    const newArr = [...navItems, 
+    { page: 'Flight', label: 'Offers', route: '/vol' },
+    { page: 'Hotel', label: 'Offers', route: '/hotel' },];
+    ['Flight', 'Hotel'].includes(page)? navigation.changePageTo('Offers'): navigation.changePageTo(page);
+    console.log('pushing to ' + page)  
+    const route = newArr.find(item => item.page === page)
+    if (route.route) {
+      router.push(route.route)
+      
     }
     
     // Close menu on mobile
@@ -67,6 +90,10 @@ const changePage = (page) => {
 .selected {
   color: rgba(255, 255, 255);
   border-bottom: solid 1px white;
+}
+.itemLabl {
+  
+  color: rgba(255, 255, 255, 0.7)!important;
 }
 .item:hover {
   cursor: pointer;

@@ -22,7 +22,9 @@
 import FlightSearch from "~/components/search/flight.vue";
 import flightOffer from "~/components/cards/flightOffer.vue";
 import flightMenu from "~/components/menus/flightMenu.vue";
-
+definePageMeta({
+  middleware: 'authenticate'  // this will trigger middleware in `middleware/auth.js`
+})
 
 const sampleFlight = {
   date: 'Mer, 23 avr 2025',

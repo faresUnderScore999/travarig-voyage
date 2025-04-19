@@ -189,7 +189,7 @@ const handleImageError = (event) => {
 .flight-filter {
   width: 100%;
   background: #ffffff;
-  
+  /* margin-left:10px; */
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   padding: 16px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -227,6 +227,7 @@ const handleImageError = (event) => {
   margin-bottom: 24px;
   padding-bottom: 16px;
   border-bottom: 1px solid #f0f0f0;
+  margin-left: 10px;
 }
 
 .filter-section:last-child {

@@ -12,14 +12,13 @@
       <!-- Slot for the page content -->
       <slot/>
     </main>
-    <!-- <footer>
-        <p>&copy; 2025 My Website</p>
-      </footer> -->
+   <Mfooter/>
   </div>
 </template>
 
 <script setup>
 // Optional: You can add logic to handle layout-specific features
+import Mfooter from "~/components/Mfooter.vue";
 import menuNavigation from "~/components/menuNavigation.vue";
 </script>
 

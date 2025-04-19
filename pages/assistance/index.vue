@@ -144,6 +144,7 @@
           
           <el-form-item class="form-actions">
             <el-button 
+            class="cust-button"
               type="primary" 
               @click="submitForm"
               :loading="loading"
@@ -205,9 +206,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import { Promotion } from '@element-plus/icons-vue'
+
+definePageMeta({
+  middleware: 'authenticate'  // this will trigger the 'auth' middleware for this page
+})
 
 const activeNames = ref([])
 const loading = ref(false)
@@ -241,7 +246,6 @@ const submitForm = () => {
   loading.value = true
   // Simulate API call
   setTimeout(() => {
-    
     loading.value = false
   }, 1500)
 }
@@ -260,6 +264,7 @@ const resetForm = () => {
   }
 }
 </script>
+
 
 <style scoped>
 .assistance-container {

@@ -3,7 +3,7 @@
   <section class="contact-page">
     <div class="header-section">
       <h1 class="title">
-        Contactez <span class="highlight">Tra<strong>V</strong>agir</span> Voyages
+        Contactez tra<strong style="color:orange">V</strong>agir Voyages
       </h1>
       <p class="subtitle">Agence de voyages de catégorie A, agréée ONTT & IATA</p>
       <el-divider />
@@ -133,8 +133,9 @@
   </section>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
+
 import {
   Message,
   Phone,
@@ -148,7 +149,9 @@ import {
   Avatar,
   Star
 } from '@element-plus/icons-vue'
-
+definePageMeta({
+  middleware: 'authenticate'  // this will trigger middleware in `middleware/auth.js`
+})
 // Contact info data
 const contactInfo = [
   {
@@ -255,12 +258,11 @@ const rules = {
 }
 
 const submitForm = () => {
-  formRef.value.validate((valid: boolean) => {
+  formRef.value.validate((valid) => {
     if (valid) {
       loading.value = true
       // Simulate API call
       setTimeout(() => {
-
         formRef.value.resetFields()
         loading.value = false
       }, 1500)
@@ -270,6 +272,7 @@ const submitForm = () => {
   })
 }
 </script>
+
 
 <style scoped>
 .contact-page {

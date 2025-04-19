@@ -8,6 +8,15 @@
 </template>
 <style >
 /* Reset margin and padding globally */
+a{
+  color: inherit!important;
+  text-decoration: none!important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+}
 
 
 body {
@@ -23,7 +32,27 @@ body {
   background-attachment: fixed;
   font-family: "Gill Sans", sans-serif;
 }
+:root {
+  --el-color-primary: #ff7a00;
+  --el-color-primary-light-3: #ff9a33;
+  --el-color-primary-light-5: #ffb366;
+  --el-color-primary-light-7: #ffcc99;
+  --el-color-primary-light-8: #ffe5cc;
+  --el-color-primary-light-9: #fff2e5;
+  --el-color-primary-dark-2: #e66e00;
+}
+.cust-button {
+  background: linear-gradient(90deg, #ff7b00, #ffaa00)!important;
+  border: none!important;
+  padding: 10px 24px;
+  font-weight: 500!important;
+  transition: all 0.3s ease!important;
+}
 
+.cust-button:hover {
+  transform: translateY(-2px)!important;
+  box-shadow: 0 4px 12px rgba(255, 123, 0, 0.3)!important;
+}
 html {
   width: 100%;
   height: 100%;

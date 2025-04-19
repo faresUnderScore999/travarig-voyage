@@ -17,7 +17,14 @@
               />
             </svg>
           </div>
-          <div style="margin-left: 10px; display: flex; align-items: center; color: white">
+          <div
+            style="
+              margin-left: 10px;
+              display: flex;
+              align-items: center;
+              color: white;
+            "
+          >
             +216 51000000
           </div>
         </div>
@@ -64,279 +71,329 @@
         </div>
       </div>
       <div v-show="!loged.logedin" class="box log">
-        <el-button  class="white-link-button" type="primary" link @click="loginSearchdepart = true" 
+        <el-button
+          class="white-link-button"
+          type="primary"
+          link
+          @click="loged.loginSearchdepart = true"
           >LOGIN</el-button
         >
       </div>
       <div v-show="!loged.logedin" class="box log">
-        <el-button :key="'plain'" type="" link @click="registerSearchdepart = true" >REGISTER</el-button>
+        <el-button
+          :key="'plain'"
+          type=""
+          link
+          @click="registerSearchdepart = true"
+          >REGISTER</el-button
+        >
       </div>
-      <div v-show="loged.logedin" class="box loged">
-        <el-button :key="'plain'" type="" link  >  <el-icon size="30"><Avatar /></el-icon></el-button>
-      
-      </div>
+      <ClientOnly>
+        <div
+          v-if="loged.logedin"
+          class="loged"
+          label-position="top"
+          status-icon
+        >
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link">
+              <el-button :key="'plain'" type="" link>
+                <el-icon size="30"><Avatar /></el-icon
+              ></el-button>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  ><el-icon><User /></el-icon>My account</el-dropdown-item
+                >
+                <el-dropdown-item
+                  ><el-icon><Star /></el-icon>Saved</el-dropdown-item
+                >
+                <el-dropdown-item>
+                  <nuxt-link to="/reservation" class="dropdown-link">
+                    <el-icon><MessageBox /></el-icon>
+                    My reservation
+                  </nuxt-link>
+                </el-dropdown-item>
+
+                <el-dropdown-item
+                  ><el-icon><SwitchButton /></el-icon>Signout</el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+      </ClientOnly>
     </div>
 
-    <el-dialog :id="dialogId" v-model="loginSearchdepart" title="Login Form" width="500">
-    <el-form :model="form">
-      <el-form-item label="Email" :label-width="formLabelWidth">
-        <el-input v-model="loginForm.mail" placeholder="enter your email here" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="Password" :label-width="formLabelWidth">
-        <el-input v-model="loginForm.pwd" placeholder="enter your password here" autocomplete="off" />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="loginSearchdepart = false">Cancel</el-button>
-        <el-button type="primary" @click="loginSubmit">
-          Confirm
-        </el-button>
-      </div>
-    </template>
-  </el-dialog>
-
-
-  <el-dialog 
-    :id="dialogId"
-    v-model="registerSearchdepart"
-    title="Registration Form"
-    width="900"
-    destroy-on-close
-    center
-  >
-    <!-- Loading state handling -->
-    <div v-if="loading" class="loading-overlay">
-      <el-loading />
-    </div>
-
-    <el-form 
-      ref="formRef"
-      :model="form2"
-      :rules="rules"
-      label-position="top"
-      status-icon
+    <el-dialog
+      :id="dialogId"
+      v-model="loged.loginSearchdepart"
+      title="Login Form"
+      width="500"
     >
-      <!-- Full Name Field -->
-      <el-form-item 
-        label="Full Name" 
-        prop="fullName"
-        required
-      >
-        <el-input 
-          v-model="form2.fullName"
-          placeholder="Enter your full name here"
-          autocomplete="on"
-          clearable
-        />
-      </el-form-item>
+      <el-form :model="loginForm" ref="loginFormRef" :rules="rules">
+        <el-form-item
+          prop="email"
+          required
+          label="Email"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="loginForm.email"
+            placeholder="enter your email here"
+            autocomplete="off"
+            type="email"
+          />
+        </el-form-item>
+        <el-form-item required label="Password" :label-width="formLabelWidth">
+          <el-input
+            v-model="loginForm.pwd"
+            placeholder="enter your password here"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-button v-if="loged.errmsg" type="danger" disabled>{{
+          loged.errmsg
+        }}</el-button>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button class="cust-button" type="primary" @click="loginSubmit">
+            Confirm
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
 
-      <!-- Email Field -->
-      <el-form-item 
-        label="Email" 
-        prop="email"
-        required
-      >
-        <el-input 
-          v-model="form2.email"
-          placeholder="Enter your email address"
-          autocomplete="on"
-          type="email"
-          clearable
-        />
-      </el-form-item>
+    <el-dialog
+      :id="dialogId"
+      v-model="registerSearchdepart"
+      title="Registration Form"
+      width="900"
+      destroy-on-close
+      center
+    >
+      <!-- Loading state handling -->
+      <div v-if="loading" class="loading-overlay">
+        <el-loading />
+      </div>
 
-      <!-- Password Field -->
-      <el-form-item 
-        label="Password" 
-        prop="password"
-        required
+      <el-form
+        ref="formRef"
+        :model="form2"
+        :rules="rules"
+        label-position="top"
+        status-icon
       >
-        <el-input 
-          v-model="form2.password"
-          placeholder="Create a strong password"
-          show-password
-          autocomplete="off"
-          clearable
-        />
-      </el-form-item>
+        <!-- Full Name Field -->
+        <el-form-item label="Full Name" prop="fullName" required>
+          <el-input
+            v-model="form2.fullName"
+            placeholder="Enter your full name here"
+            autocomplete="on"
+            clearable
+          />
+        </el-form-item>
 
-      <!-- Confirm Password Field -->
-      <el-form-item 
-        label="Confirm Password" 
-        prop="confirmPassword"
-        required
-      >
-        <el-input 
-          v-model="form2.confirmPassword"
-          placeholder="Confirm your password"
-          show-password
-          autocomplete="off"
-          clearable
-        />
-      </el-form-item>
+        <!-- Email Field -->
+        <el-form-item label="Email" prop="email" required>
+          <el-input
+            v-model="form2.email"
+            placeholder="Enter your email address"
+            autocomplete="on"
+            type="email"
+            clearable
+          />
+        </el-form-item>
 
-      <!-- Captcha Field -->
-      <el-form-item 
-        label="Captcha" 
-        prop="captcha"
-        required
-      >
-        <div class="captcha-container">
-          <el-input 
-            v-model="form2.captcha"
-            placeholder="Enter captcha code"
+        <!-- Password Field -->
+        <el-form-item label="Password" prop="password" required>
+          <el-input
+            v-model="form2.password"
+            placeholder="Create a strong password"
+            show-password
             autocomplete="off"
             clearable
           />
-          <!-- Add your captcha component here -->
+        </el-form-item>
+
+        <!-- Confirm Password Field -->
+        <el-form-item label="Confirm Password" prop="confirmPassword" required>
+          <el-input
+            v-model="form2.confirmPassword"
+            placeholder="Confirm your password"
+            show-password
+            autocomplete="off"
+            clearable
+          />
+        </el-form-item>
+
+        <!-- Captcha Field -->
+        <el-form-item label="Captcha" prop="captcha" required>
+          <div class="captcha-container">
+            <el-input
+              v-model="form2.captcha"
+              placeholder="Enter captcha code"
+              autocomplete="off"
+              clearable
+            />
+            <!-- Add your captcha component here -->
+          </div>
+        </el-form-item>
+
+        <!-- Form Submit Button -->
+      </el-form>
+
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="resetForm(formRef)">Reset</el-button>
+          <el-button @click="registerSearchdepart = false">Cancel</el-button>
+          <el-button
+            type="primary"
+            @click="submitForm(formRef)"
+            :loading="loading"
+            class="cust-button"
+          >
+            {{ loading ? "Registering..." : "Register" }}
+          </el-button>
         </div>
-      </el-form-item>
-
-      <!-- Form Submit Button -->
-      <el-button 
-        type="primary" 
-        @click="submitForm(formRef)"
-        :loading="loading"
-        class="submit-button"
-      >
-        Register
-      </el-button>
-    </el-form>
-
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="resetForm(formRef)">Reset</el-button>
-        <el-button @click="registerSearchdepart = false">Cancel</el-button>
-        <el-button 
-          type="primary" 
-          @click="submitForm(formRef)"
-          :loading="loading"
-        >
-          {{ loading ? 'Registering...' : 'Register' }}
-        </el-button>
-      </div>
-    </template>
-  </el-dialog>
-
-
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
+import { reactive } from "vue";
+import { ElMessage } from "element-plus";
 
 const { generateId } = useNuxtApp().$idProvider;
-const dialogId = generateId()
-
-// Reactive state
-const loginSearchdepart = ref(false);
+const dialogId = generateId();
 const registerSearchdepart = ref(false);
-const loginForm=ref({
-  mail:"",
-  pwd:""
-})
-const loged = useLoginStore()
-const loginSubmit = () => {
 
-  loged.login(loginForm.value)
-  loginSearchdepart.value = false
-  console.log(loged.logedin)
-}
+const loged = useLoginStore();
 
-// Form model
-const form = ref({
-  mail: '',
-  mdp:''
+const loginForm = ref({
+  email: "",
+  pwd: "",
+});
+
+const form2 = reactive({
+  fullName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  captcha: "",
 });
 
 // Label width for form items
-const formLabelWidth = '120px';
+const formLabelWidth = "120px";
 
-import {  reactive } from 'vue'
-import { ElMessage } from 'element-plus'
-
-const formRef = ref()
-const loading = ref(false)
-
-const form2 = reactive({
-  fullName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  captcha: ''
-})
+const loginFormRef = ref()
+const formRef = ref();
+const loading = ref(false);
 
 const rules = reactive({
   fullName: [
-    { required: true, message: 'Please enter your full name', trigger: 'blur' },
-    { min: 2, max: 50, message: 'Name must be between 2 and 50 characters', trigger: 'blur' }
+    { required: true, message: "Please enter your full name", trigger: "blur" },
+    {
+      min: 2,
+      max: 50,
+      message: "Name must be between 2 and 50 characters",
+      trigger: "blur",
+    },
   ],
   email: [
-    { required: true, message: 'Please enter your email address', trigger: 'blur' },
-    { 
-      type: 'email', 
-      message: 'Please enter a valid email address', 
-      trigger: ['blur', 'change'] 
-    }
+    {
+      required: true,
+      message: "Please enter your email address",
+      trigger: "blur",
+    },
+    {
+      type: "email",
+      message: "Please enter a valid email address",
+      trigger: ["blur", "change"],
+    },
   ],
   password: [
-    { required: true, message: 'Please create a password', trigger: 'blur' },
-    { 
-      pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      message: 'Password must be at least 8 characters with uppercase, lowercase, number and special character',
-      trigger: 'blur'
-    }
+    { required: true, message: "Please create a password", trigger: "blur" },
+    {
+      pattern:
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      message:
+        "Password must be at least 8 characters with uppercase, lowercase, number and special character",
+      trigger: "blur",
+    },
   ],
   confirmPassword: [
-    { required: true, message: 'Please confirm your password', trigger: 'blur' },
+    {
+      required: true,
+      message: "Please confirm your password",
+      trigger: "blur",
+    },
     {
       validator: (rule, value, callback) => {
         if (!value) {
-          callback(new Error('Please confirm your password'))
+          callback(new Error("Please confirm your password"));
         } else if (value !== form.password) {
-          callback(new Error('Passwords don\'t match'))
+          callback(new Error("Passwords don't match"));
         } else {
-          callback()
+          callback();
         }
       },
-      trigger: 'blur'
-    }
+      trigger: "blur",
+    },
   ],
   captcha: [
-    { required: true, message: 'Please enter the captcha code', trigger: 'blur' },
-    { min: 4, max: 6, message: 'Invalid captcha length', trigger: 'blur' }
-  ]
-})
+    {
+      required: true,
+      message: "Please enter the captcha code",
+      trigger: "blur",
+    },
+    { min: 4, max: 6, message: "Invalid captcha length", trigger: "blur" },
+  ],
+});
+
+async function loginSubmit() {
+  try {
+    await loginFormRef.value.validate(async (valid) => {
+      if (valid) {
+        loged.login(loginForm.value);
+
+      }
+    });
+  } catch (error) {
+    ElMessage.error("verify field");
+    console.error("login error:", error);
+  }
+}
 
 async function submitForm(formRef) {
-  loading.value = true
-  
+  loading.value = true;
+
   try {
-    await formRef.validate(async (valid) => {
+    await formRef.value.validate(async (valid) => {
       if (valid) {
         // Add your registration logic here
-        console.log('Registration successful:', form)
-        ElMessage.success('Registration successful!')
-        registerSearchdepart.value = false
+        console.log("Registration successful:", form);
+        ElMessage.success("Registration successful!");
+        registerSearchdepart.value = false;
       }
-    })
+    });
   } catch (error) {
-    ElMessage.error('Registration failed')
-    console.error('Registration error:', error)
+    ElMessage.error("Registration failed");
+    console.error("Registration error:", error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 function resetForm(formRef) {
-  formRef.resetFields()
+  formRef.resetFields();
 }
 </script>
-
-
 <style scoped>
-
 nav {
   width: 100%;
 }
@@ -360,7 +417,7 @@ router-link {
   left: calc(100% - 400px);
   color: white;
 }
-.loged{
+.loged {
   position: absolute;
   right: 2%;
 }

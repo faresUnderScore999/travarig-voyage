@@ -59,7 +59,9 @@ import ActivitiesIcon from "~/components/icons/activities.vue";
 import HotelIcon from "~/components/icons/hotel.vue";
 
 // Declare the 'page' variable using ref() for reactivity
-
+definePageMeta({
+  middleware: 'authenticate'  // this will trigger middleware in `middleware/auth.js`
+})
 const page = ref("HOTELS");
 
 watch(page, (newPage, oldPage) => {
